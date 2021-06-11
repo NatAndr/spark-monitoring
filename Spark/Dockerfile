@@ -28,8 +28,8 @@ COPY Spark/start.sh ./
 COPY Spark/run_app.sh ./
 COPY Spark/metrics.properties ./
 COPY ${jarpath} ./
-COPY data/yellow_taxi_jan_25_2018 ./
-COPY data/taxi_zones.csv ./
+
+COPY Spark/data/ ./data
 
 # Updates
 RUN apt-get update \

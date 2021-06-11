@@ -17,6 +17,9 @@ start_system() {
     sudo ${SPARK_HOME}/sbin/start-all.sh
 
     sudo jps
+
+    sudo ${HADOOP_HOME}/bin/hdfs dfs -put /data /
+    sudo ${HADOOP_HOME}/bin/hdfs dfs -ls /data
 }
 
 
