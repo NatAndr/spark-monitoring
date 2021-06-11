@@ -1,9 +1,12 @@
 package org.example
 
+import org.apache.hadoop.conf.Configuration
 import org.apache.spark.sql.functions.broadcast
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 import org.example.Utils.{readCsv, readParquet}
 import org.slf4j.LoggerFactory
+import org.apache.hadoop.fs
+import org.apache.hadoop.fs._
 
 object DataFrameDemo {
 
@@ -19,17 +22,18 @@ object DataFrameDemo {
   }
 
   def main(args: Array[String]): Unit = {
+    val logger = LoggerFactory.getLogger(this.getClass.getName)
+
     implicit val spark: SparkSession = SparkSession
       .builder()
       .appName("spark_app")
       .config("spark.metrics.namespace", "spark_app")
       .getOrCreate()
 
-    val logger = LoggerFactory.getLogger(this.getClass.getName)
-    logger.info("Start processing data 1")
+    logger.info("Start processing data")
 
-    val taxiDF = readParquet("./yellow_taxi_jan_25_2018")
-    val taxiZonesDF = readCsv("./taxi_zones.csv")
+    val taxiDF = readParquet("hdfs:///data/yellow_taxi_jan_25_2018")
+    val taxiZonesDF = readCsv("hdfs:///data/taxi_zones.csv")
 
     val value = processTaxiData(taxiDF, taxiZonesDF)
     value.show()
